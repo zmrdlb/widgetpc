@@ -1,0 +1,22 @@
+requirejs.config({
+    paths: {
+        'jquery': 'widget/lib/jquery-1.11.3.min',
+        'libio': 'widget/io',
+        'libjson': 'widget/util/json',
+        'libchannel': 'widget/util/channel',
+        'liblayers': 'widget/ui/layer',
+        'libinherit': 'widget/util/inherit',
+        'libevt': 'widget/util/evt',
+        'libdom': 'widget/util/dom',
+        'libcompatible': 'widget/util/compatible',
+        'libload': 'widget/util/load',
+        'libbase': 'widget/util/base',
+        'libclassdesign': 'widget/util/classdesign',
+        'libtpl': 'widget/util/tpl',
+        'libpage': 'widget/ui/page'
+    }
+});
+
+define('$',['jquery'],function($){
+    return $;
+});
