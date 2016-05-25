@@ -8,7 +8,7 @@
     	$bLength('我aa到底占用多少个字节');
      });
  */
-define(['libbase/bLength','libbase/checkDataType'],function($bLength,$checkDataType){
+define(['libstr/bLength','libbase/checkDataType'],function($bLength,$checkDataType){
     /**
      * @param {String} *str 待截取的字符串
      * @param {Number} *lens 字节数

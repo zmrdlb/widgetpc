@@ -4,7 +4,7 @@
  * @author Zhang Mingrui | 592044573@qq.com
  * @return 方法
  * @example
- *   requirejs(['str/bLength'],function($bLength){
+ *   requirejs(['libstr/bLength'],function($bLength){
     	$bLength('我aa到底占用多少个字符');
      });
  */

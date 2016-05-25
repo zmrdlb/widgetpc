@@ -4,12 +4,12 @@
  * @author Zhang Mingrui | 592044573@qq.com
  * @return 方法
  * @example
- *   requirejs(['libbase/getSubStr'],function($getSubStr){
+ *   requirejs(['libstr/getSubStr'],function($getSubStr){
     	$getSubStr('我想回家',7); //执行结果输出：我想...
     	$getSubStr('我想回家',8); //执行结果输出：我想回家
      });
  */
-define(['libbase/bLength','libbase/leftB','libbase/checkDataType'], function($bLength,$leftB,$checkDataType) {
+define(['libstr/bLength','libstr/leftB','libbase/checkDataType'], function($bLength,$leftB,$checkDataType) {
   /**
    * 字符串截取，并添加指定后缀，默认是...
    * @param {String} *str 待截取的字符串
