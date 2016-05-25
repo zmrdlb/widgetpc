@@ -158,7 +158,7 @@ define(['$','libio/ioconfig'],function($,$ioconfig){
 		 */
 		transRequest: function(name,args){
 			if(typeof name == 'string' && name != ''){
-				var curopt = $ioconfig.getTrans()[name];
+				var curopt = $ioconfig.getTrans(name);
 				if(curopt && curopt.url != ''){
 					curopt = $.extend(true,{},curopt,args||{});
 					curopt = format(curopt,mainqueue);
@@ -197,7 +197,7 @@ define(['$','libio/ioconfig'],function($,$ioconfig){
 					var name = argsarr[i].name;
 					var args = argsarr[i].args || {};
 					if(typeof name == 'string' && name != ''){
-						var curopt = $ioconfig.getTrans()[name];
+						var curopt = $ioconfig.getTrans(name);
 						if(curopt && curopt.url != ''){
 							curopt = $.extend(true,{},curopt,args||{},{customconfig:{queue:true}});
 							curopt = format(curopt,queueobj);

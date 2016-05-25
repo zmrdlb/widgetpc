@@ -91,9 +91,10 @@ define(['$'],function($){
 	};
 	/**
 	 * 获取接口配置 
+	 * @param {String} name 接口名称
 	 */
-	that.getTrans = function(){
-		return iocache;
+	that.getTrans = function(name){
+		return iocache[name];
 	};
 	/**
 	 * 设置全局的接口请求配置 
