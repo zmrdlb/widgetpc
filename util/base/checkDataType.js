@@ -68,7 +68,7 @@ define(function(){
  		 * @param {Object} node
 		 */
 		isValidJqueryDom: function(node){
-			return Object.prototype.toString.call(node) == '[object Object]' && this.isFunction(node.size) && node.size() > 0;
+			return this.isFunction(node.size) && node.size() > 0;
 		}
 	};
 });
