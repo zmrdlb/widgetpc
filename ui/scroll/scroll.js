@@ -37,7 +37,7 @@
  * focus {Function} 定位到第几屏滚动
  * circle {Function} 循环滚动
  */
-define(['$','libscroll/baseScroll','libinherit/extendClass','libdom/checknode'], function($,$baseScroll,$extendClass,$checknode){
+define(['$','libscroll/baseScroll','libinherit/extendClass','libdom/checknode','libevt/winresize'], function($,$baseScroll,$extendClass,$checknode,$winresize){
   /**
    *  滚动类
    */
@@ -121,19 +121,17 @@ define(['$','libscroll/baseScroll','libinherit/extendClass','libdom/checknode'],
     });
     //如果是响应式，则监听window大小改变事件
     if(conf.change){
-      var evtname = 'resize';
-      if('onorientationchange' in window){
-        evtname = 'onorientationchange';
-      }
-      $(window).bind(evtname, function(){
-        var size = getConSize();
-        if(size.len != this.len || size.alllen != this.alllen){
-          that.resizeBeginCal.fire();
-          that.resetParam(size);
-          that.scrollNode.css(animateName, that.left + 'px');
-          that.resizeEndCal.fire();
-        }
-      });
+    	$winresize.listen({
+    		call: function(){
+    			var size = getConSize();
+		        if(size.len != this.len || size.alllen != this.alllen){
+		          that.resizeBeginCal.fire();
+		          that.resetParam(size);
+		          that.scrollNode.css(animateName, that.left + 'px');
+		          that.resizeEndCal.fire();
+		        }
+    		}
+    	});
     }
   }
   
