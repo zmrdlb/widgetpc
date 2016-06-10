@@ -70,7 +70,7 @@ define(['$','libscroll/baseScroll','libinherit/extendClass','libdom/checknode','
     }, opt || {});
     $checknode(conf.nodes,'参数nodes中的节点无效');
     var isabsolute = conf.nodes.scrollNode.css('position')=='absolute'? true: false;
-    var animateName = conf.animateName[conf.type];
+    this.animateName = conf.animateName[conf.type];
     /**
      * 获取滚动区域容器大小 
      * zepto api省去了outerWidth和innerWidth。所以在这里和jquery api做了兼容
@@ -127,7 +127,7 @@ define(['$','libscroll/baseScroll','libinherit/extendClass','libdom/checknode','
 		        if(size.len != this.len || size.alllen != this.alllen){
 		          that.resizeBeginCal.fire();
 		          that.resetParam(size);
-		          that.scrollNode.css(animateName, that.left + 'px');
+		          that.scrollNode.css(that.animateName, that.left + 'px');
 		          that.resizeEndCal.fire();
 		        }
     		}
@@ -155,7 +155,7 @@ define(['$','libscroll/baseScroll','libinherit/extendClass','libdom/checknode','
   scroll.prototype.animate = function(left){
 	 this.animateCal.fire(this.getIndex());
 	 var animateObj = this._animateProp;
-	 animateObj[animateName] = left + 'px';
+	 animateObj[this.animateName] = left + 'px';
 	 this.scrollNode.animate(animateObj,this._animateOption);
   };
   /**
