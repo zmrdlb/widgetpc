@@ -39,7 +39,11 @@ define(['$','libcompatible/csssuport','libevt/winscroll','libevt/scroll','libevt
 		}
 		cssopt.marginLeft = marginLeft+'px';
 		cssopt.marginTop = marginTop+'px';
-		layer.css(cssopt);
+		if(typeof posopt.custompos == 'function'){
+		    posopt.custompos(cssopt);
+		}else{
+		    layer.css(cssopt);
+		}
 	}
 	/**
 	 * 定位类
@@ -70,7 +74,8 @@ define(['$','libcompatible/csssuport','libevt/winscroll','libevt/scroll','libevt
 			offset: [0,0], //定义后偏移尺寸 [x轴,y轴]。对于mode是full的模式无效
 			sizechange: false, //当mode是c时，offsetParent resize时，待定位层的大小是否会改变
 			minwidth: 0, //定位计算时，待定位层layer的最小宽度
-            minheight: 0 //定位计算时，待定位层layer的最小高度
+            minheight: 0, //定位计算时，待定位层layer的最小高度
+            custompos: null //用户自定义定位方法。如果声明此方法，则不会使用系统默认的方法设置pos的定位参数，而是把定位参数pos传递给此方法
 		},config || {});
 		var that = this;
 		//初步检测定位参考容器
