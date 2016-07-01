@@ -31,11 +31,11 @@ define(['libbase/mergeobj'],function($mergeobj){
      */
     function ExtendClass(subClass, superClass) {
         //第一种方法
-    	// var F = function() {};
-	    // F.prototype = superClass.prototype;
-	    // subClass.prototype = new F();
+    	var F = function() {};
+	    F.prototype = superClass.prototype;
+	    subClass.prototype = new F();
 	    //第二种方法
-	    subClass.prototype = Object.create(superClass.prototype);
+	    //subClass.prototype = Object.create(superClass.prototype);
 	    subClass.prototype.constructor = subClass;
 	    subClass.superclass = superClass.prototype;
 	    if(superClass.prototype.constructor == Object.prototype.constructor) {
