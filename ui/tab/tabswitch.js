@@ -3,7 +3,7 @@
  * @version 1.0 | 2015-12-08 版本信息
  * @author Zhang Mingrui | 592044573@qq.com
  * @example
- * requirejs(['$','tab/tabswitch'],function($,$tabswitch){
+ * requirejs(['$','libtab/tabswitch'],function($,$tabswitch){
      *   var tabobj = tabswitch(容器节点,{
              tabSelector: '[node="tab"]', //tab选择器
              conSelector: '[node="tabcon"]', //tab内容区选择器
