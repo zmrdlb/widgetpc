@@ -26,7 +26,7 @@ define(['$','libdom/checknode','libbase/checkDataType','libcompatible/deviceevtn
         var conf = $.extend({
             tabSelector: '[node="tab"]', //tab选择器
             conSelector: '[node="tabcon"]', //tab内容区选择器
-            curclass: 'cur', //选中的tab的class
+            curclass: 'cur', //选中的tab或tab内容区的class
             showindex: 1, //初始化显示第几个tab
             tabfixed: true, //tab或tabcon是否固定（即不会动态增删），如果不固定，请设置为false
             /**
@@ -35,6 +35,7 @@ define(['$','libdom/checknode','libbase/checkDataType','libcompatible/deviceevtn
              * @param type 触发tabchange的类型。 
              *      'click':点击tab触发|组件创建时可能触发
              *      'trigger': 代码调用showTab方法触发;
+             *      'init': 组件初始化时触发
              * @param tabnode 当前选中的tab节点
              * @param connode 当前选中的con节点
              */
@@ -66,17 +67,16 @@ define(['$','libdom/checknode','libbase/checkDataType','libcompatible/deviceevtn
         /**
          * 显示指定的tab 
          * @param {Number} *index 索引,从1开始
-         * @param {Boolean} *type 触发tabchange的类型。 'click':点击tab触发|组件创建时可能触发   'trigger': 代码调用showTab方法触发
-         * @param {Boolean} first 是否是组件初始化时调用
+         * @param {Boolean} *type 触发tabchange的类型。 'click':点击tab触发|组件创建时可能触发   'trigger': 代码调用showTab方法触发   'init': 组件初始化时触发
          */
-        function showTab(index,type,first){
+        function showTab(index,type){
             var tabs = getTabsNode();
             var cons = getConsNode();
             if(tabs.length < index || cons.length < index){
                 return;
             }
             if(tabs.eq(index-1).hasClass(conf.curclass) && cons.eq(index-1).css('display') != 'none'){ //说明当前index已经是cur状态
-                if(first && conf.initFireChange){ //说明首次要触发change
+                if(type == 'init' && conf.initFireChange){ //说明首次要触发change
                     if($checkDataType.isFunction(conf.tabchange)){
                         conf.tabchange(index,type,tabs.eq(index-1),cons.eq(index-1));
                     }
@@ -84,7 +84,7 @@ define(['$','libdom/checknode','libbase/checkDataType','libcompatible/deviceevtn
                 return;
             }
             tabs.eq(index-1).addClass(conf.curclass).siblings().removeClass(conf.curclass);
-            cons.eq(index-1).show().siblings().hide();
+            cons.eq(index-1).show().addClass(conf.curclass).siblings().hide().removeClass(conf.curclass);
             if($checkDataType.isFunction(conf.tabchange)){
                 conf.tabchange(index,type,tabs.eq(index-1),cons.eq(index-1));
             }
@@ -106,7 +106,7 @@ define(['$','libdom/checknode','libbase/checkDataType','libcompatible/deviceevtn
          * 初始化 
          */
         function init(){
-            showTab(conf.showindex,'click',true);
+            showTab(conf.showindex,'init');
             bindEvt();
         }
         init();
