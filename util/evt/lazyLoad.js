@@ -18,6 +18,13 @@
         }
  *  });
  *  
+ *  重要说明：由于框架是单页应用。所以在onHide的时候要调用this.lazyload.destroy()来销毁。如：
+ *          this.on('onShow',function(){
+ *              this.lazyload = ***
+ *          });
+            this.on('onHide', function () {
+                this.lazyload.destroy();
+            });
  */
 define(function(){
   /**
@@ -52,7 +59,7 @@ define(function(){
       }else{
           this.iswindow = false;
       }
-      
+      this.checkscroll = false; //是否是check检测引发的滚动
       this.check(true);
       this.listenScroll();
   }
@@ -71,6 +78,7 @@ define(function(){
       if(curtop > 0){
           return;
       }else{
+          this.checkscroll = true;
           this.setScrollTop(1);
           setTimeout($.proxy(function(){
               if(this.getScrollTop() == 0){
@@ -78,7 +86,8 @@ define(function(){
               }else{
                   this.setScrollTop(0);
               }
-          },this),100);
+              this.checkscroll = false;
+          },this),200);
       }
   };
   /**
@@ -121,6 +130,9 @@ define(function(){
            timer && clearTimeout(timer);
       }
       this.container.on('scroll.lazyload',function(e){
+          if(_this.checkscroll){
+              return;
+          }
           stop();
           timer = setTimeout(function(){
               var canlazy = _this.container.height()+_this.container.scrollTop()+_this.offset >= _this.getScrollHeight();

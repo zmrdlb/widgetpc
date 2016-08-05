@@ -11,7 +11,6 @@
  *     *scrollNode: null, //待滚动区域容器
        *conNode: null, //展示区域容器
  *    }
- *    scrolllen: null, //待滚动区域的长度|宽(x轴)或者高(y轴)，，如果设立此值就覆盖掉了根据scrollNode算的长度
       type: 'x', //滚动类型 x轴滚动或者y轴滚动
       change: false, //滚动区域是否会根据窗口大小改变
       direction: 'shun', //循环滚动的滚动方向   shun:顺时针  ni:逆时针  默认为shun
@@ -49,7 +48,7 @@ define(['$','libscroll/baseScroll','libinherit/extendClass','libdom/checknode','
         conNode: null //展示区域容器
       },
       type: 'x', //滚动类型 x轴滚动或者y轴滚动
-      change: false, //滚动区域是否会根据窗口大小改变
+      change: false, //滚动区域或展示区容器是否会根据窗口大小改变
       direction: 'shun', //循环滚动的滚动方向   shun:顺时针  ni:逆时针  默认为shun
       animateName: {
       	  x: 'margin-left', //或left
@@ -69,8 +68,25 @@ define(['$','libscroll/baseScroll','libinherit/extendClass','libdom/checknode','
       customGetSize: null
     }, opt || {});
     $checknode(conf.nodes,'参数nodes中的节点无效');
-    var isabsolute = conf.nodes.scrollNode.css('position')=='absolute'? true: false;
+    this.type = conf.type;
     this.animateName = conf.animateName[conf.type];
+    
+    var _typeSizeName = {
+        'x': ['outerWidth','innerWidth','width'],
+        'y': ['outerHeight','innerHeight','height']
+    };
+        
+    function getMyLen(node,type){
+        var funArr = _typeSizeName[type];
+        var len = 0;
+        $.each(funArr,function(index,funname){
+            if(node[funname]){
+                len = node[funname]();
+                return false;
+            }
+        });
+        return len;
+    }
     /**
      * 获取滚动区域容器大小 
      * zepto api省去了outerWidth和innerWidth。所以在这里和jquery api做了兼容
@@ -80,24 +96,12 @@ define(['$','libscroll/baseScroll','libinherit/extendClass','libdom/checknode','
     		return conf.customGetSize();
     	}else{
     		  var len = 0;
-		      var alllen = 0;
+		      var alllen = getMyLen(conf.nodes.scrollNode,type);
 		      if(conf.type == 'x'){
-		      	  alllen = conf.nodes.scrollNode.outerWidth? conf.nodes.scrollNode.outerWidth(): conf.nodes.scrollNode.width();
-		    	  if(isabsolute){
-		              len = conf.nodes.conNode.innerWidth? conf.nodes.conNode.innerWidth(): conf.nodes.conNode.width();
-		          }
-		          else{
-		              len = conf.nodes.conNode.width();
-		          }
+		      	  len = conf.nodes.conNode.width();
 		      }
 		      else{
-		          alllen = conf.nodes.scrollNode.outerHeight? conf.nodes.scrollNode.outerHeight(): conf.nodes.scrollNode.height();
-		          if(isabsolute){
-			          len = conf.nodes.conNode.innerHeight? conf.nodes.conNode.innerHeight(): conf.nodes.conNode.height();
-			      }
-			      else{
-			          len = conf.nodes.conNode.height();
-			      }
+		          len = conf.nodes.conNode.height();
 		      }
 		      return {
 		        len: len,
