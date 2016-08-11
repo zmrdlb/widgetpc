@@ -9,7 +9,7 @@
  *   layer.showcal.add(function(type){switch(type){case 'before':console.log('层显示前');break; case 'after':console.log('层显示后');break;}});
  *   layer.hidecal.add(function(type){switch(type){case 'before':console.log('层隐藏前');break; case 'after':console.log('层隐藏后');break;}});
  *   layer.setContent('<div node="content"></div>'); //设置layer层里面的内容
- *   layer.getNodes(['content']); // 获取node="content"的节点
+ *   layer.getNodes(['content']); // 获取class="js-content"的节点
  *   layer.show(); //显示层
  *   layer.hide(); //隐藏层
  *   layer.layer; //层dom节点对象
@@ -58,7 +58,7 @@ define(['$','liblayers/layer','liblayers/mask','libinherit/extendClass','liblaye
 			}
 		}
 		//事件绑定
-		this.layer.on($deviceevtname.click, '[node="close"]', function(e){
+		this.layer.on($deviceevtname.click, '.js-close', function(e){
 	    	e.preventDefault();
 	    	that.hide();
 	    });
@@ -77,7 +77,7 @@ define(['$','liblayers/layer','liblayers/mask','libinherit/extendClass','liblaye
 		var result = {}, that = this;
 		if($checkDataType.isArray(nodenamearr)){
 			$.each(nodenamearr,function(index,name){
-				var node = that.layer.find('[node="'+name+'"]');
+				var node = that.layer.find('.js-'+name);
 				if(node.size() > 0){
 					result[name] = node;
 				}
@@ -104,7 +104,7 @@ define(['$','liblayers/layer','liblayers/mask','libinherit/extendClass','liblaye
 	 * 弹层销毁 
 	 */
 	bombLayer.prototype.destroy = function(){
-		this.layer.off($deviceevtname.click, '[node="close"]');
+		this.layer.off($deviceevtname.click, '.js-close');
 		bombLayer.superclass.destroy.call(this);
 		this.pos.destroy();
 		if(this.mask){

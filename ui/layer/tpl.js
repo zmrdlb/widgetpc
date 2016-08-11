@@ -5,7 +5,7 @@ define({
 	alert: [
 	    '<div>标题</div>',
 		'<div node="content">内容区</div>',
-		'<div><a href="javascript:;" node="ok">确定</a></div>'
+		'<div><a href="javascript:;" class="js-ok">确定</a></div>'
 	].join(''),
 	/**
 	 * confirm弹层模板，必须具有指定的node属性 
@@ -13,6 +13,6 @@ define({
 	confirm: [
 	    '<div>标题</div>',
 		'<div node="content">内容区</div>',
-		'<div><a href="javascript:;" node="ok">确定</a><a href="javascript:;" node="cancel">取消</a></div>'
+		'<div><a href="javascript:;" class="js-ok">确定</a><a href="javascript:;" class="js-cancel">取消</a></div>'
 	].join('')
 });

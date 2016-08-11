@@ -10,9 +10,9 @@
  * 	 var layer = new $alert({
  * 	 	alert: {
  * 			frametpl: [ //弹层基本模板
-				'<div node="title"></div>',
-				'<div node="content"></div>',
-				'<div><a href="javascript:;" node="ok">好的</a></div>'
+				'<div class="js-title"></div>',
+				'<div class="js-content"></div>',
+				'<div><a href="javascript:;" class="js-ok">好的</a></div>'
 			].join('')
  *      }
  *   });
@@ -20,7 +20,7 @@
  *   layer.hidecal.add(function(type){switch(type){case 'before':console.log('层隐藏前');break; case 'after':console.log('层隐藏后');break;}});
  *   layer.okcal.add(function(e){console.log('点击了确定')});
  *   layer.setMyContent('设置node="content"节点的innerHTML');
- *   var nodeArr = layer.getNodes(['title']); // 获取node="指定属性"的节点
+ *   var nodeArr = layer.getNodes(['title']); // 获取class="js-title"的节点
  *   nodeArr.title.html('内容区html');
  *   layer.contentnode; //内容区node="content"节点
  *   layer.show(); //显示层
@@ -49,10 +49,10 @@ define(['$','liblayers/bombLayer','liblayers/tpl','libcompatible/deviceevtname',
 		var that = this;
 		alert.superclass.constructor.call(this,opt);
 		this.setContent(opt.alert.frametpl);
-		this.contentnode = this.layer.find('[node="content"]'); //内容区节点
+		this.contentnode = this.layer.find('.js-content'); //内容区节点
 		this.okcal = $.Callbacks();
 		//事件绑定
-	    this.layer.on($deviceevtname.click, '[node="ok"]', function(e){
+	    this.layer.on($deviceevtname.click, '.js-ok', function(e){
 	    	e.preventDefault();
 	    	that.hide();
 	    	that.okcal.fire(e);
@@ -72,7 +72,7 @@ define(['$','liblayers/bombLayer','liblayers/tpl','libcompatible/deviceevtname',
 	 * 组件销毁 
 	 */
 	alert.prototype.destroy = function(){
-		this.layer.off($deviceevtname.click, '[node="ok"]');
+		this.layer.off($deviceevtname.click, '.js-ok');
 		alert.superclass.destroy.call(this);
 		this.contentnode = null;
 		this.okcal = null;

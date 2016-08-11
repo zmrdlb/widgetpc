@@ -11,9 +11,9 @@
  * 	 var layer = new $confirm({
  * 	 	confirm: {
  * 			frametpl: [ //弹层基本模板
-				'<div node="title"></div>',
-				'<div node="content"></div>',
-				'<div><a href="javascript:;" node="ok">好的</a><a href="javascript:;" node="cancel">等下说</a></div>'
+				'<div class="js-title"></div>',
+				'<div class="js-content"></div>',
+				'<div><a href="javascript:;" class="js-ok">好的</a><a href="javascript:;" class="js-cancel">等下说</a></div>'
 			].join('')
  *      }
  *   });
@@ -22,7 +22,7 @@
  *   layer.okcal.add(function(e){console.log('点击了确定')});
  *   layer.cancelcal.add(function(e){console.log('点击了取消')});
  *   layer.setMyContent('设置node="content"节点的innerHTML');
- *   var nodeArr = layer.getNodes(['title']); // 获取node="指定属性"的节点
+ *   var nodeArr = layer.getNodes(['title']); // 获取class="js-title"的节点
  *   nodeArr.title.html('内容区html');
  *   layer.contentnode; //内容区node="content"节点
  *   layer.show(); //显示层
@@ -51,16 +51,16 @@ define(['$','liblayers/bombLayer','liblayers/tpl','libcompatible/deviceevtname',
 		var that = this;
 		confirm.superclass.constructor.call(this,opt);
 		this.setContent(opt.confirm.frametpl);
-		this.contentnode = this.layer.find('[node="content"]'); //内容区节点
+		this.contentnode = this.layer.find('.js-content'); //内容区节点
 		this.okcal = $.Callbacks();
 		this.cancelcal = $.Callbacks();
 		//事件绑定
-	    this.layer.on($deviceevtname.click, '[node="ok"]', function(e){
+	    this.layer.on($deviceevtname.click, '.js-ok', function(e){
 	    	e.preventDefault();
 	    	that.hide();
 	    	that.okcal.fire(e);
 	    });
-	    this.layer.on($deviceevtname.click, '[node="cancel"]', function(e){
+	    this.layer.on($deviceevtname.click, '.js-cancel', function(e){
 	    	e.preventDefault();
 	    	that.hide();
 	    	that.cancelcal.fire(e);
@@ -80,8 +80,8 @@ define(['$','liblayers/bombLayer','liblayers/tpl','libcompatible/deviceevtname',
 	 * 组件销毁 
 	 */
 	confirm.prototype.destroy = function(){
-		this.layer.off($deviceevtname.click, '[node="ok"]');
-		this.layer.off($deviceevtname.click, '[node="cancel"]');
+		this.layer.off($deviceevtname.click, '.js-ok');
+		this.layer.off($deviceevtname.click, '.js-cancel');
 		confirm.superclass.destroy.call(this);
 		this.contentnode = null;
 		this.okcal = null;
