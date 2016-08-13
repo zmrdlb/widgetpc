@@ -90,6 +90,7 @@ define(['$','libio/ioconfig'],function($,$ioconfig){
 		var oldcomplete = conf.complete;
 		var deallogin = conf.customconfig.deallogin;
 		var dealerror = conf.customconfig.dealerror;
+		var dealdata = conf.customconfig.dealdata;
 		conf.success = function(data, textStatus, jqXHR){ //重写success方法，用来处理未登陆问题
 			if(deallogin && $ioconfig.login.url != '' && typeof $ioconfig.login.filter == 'function'){ //监测是否有未登陆错误处理
 				if($ioconfig.login.filter(data)){
@@ -105,15 +106,21 @@ define(['$','libio/ioconfig'],function($,$ioconfig){
 					return;
 				}
 			}
-			if(dealerror && typeof $ioconfig.error.filter == 'function'){ //监测是否有业务错误处理
-			    if($ioconfig.error.filter(data)){
+			if(dealerror && typeof $ioconfig.error.filter == 'function'){ //检测是否有业务错误处理
+			    if($ioconfig.error.filter(data)){ //业务错误
 			        if(typeof conf[$ioconfig.error.funname] == 'function'){
 			            conf[$ioconfig.error.funname](data, textStatus, jqXHR);
 			        }
-			        return;
+			    }else{ //业务成功
+			        if(dealdata){ //统一处理业务成功数据
+			            typeof oldsuccess == 'function' && oldsuccess(conf.dealdata(data, textStatus, jqXHR), textStatus, jqXHR);
+			        }else{
+			            typeof oldsuccess == 'function' && oldsuccess(data, textStatus, jqXHR);
+			        }
 			    }
+			}else{
+			    typeof oldsuccess == 'function' && oldsuccess(data, textStatus, jqXHR);
 			}
-			typeof oldsuccess == 'function' && oldsuccess(data, textStatus, jqXHR);
 		};
 		if(conf.customconfig.queue){ //说明接口同意进行队列控制
 			conf.complete = function(jqXHR, textStatus){ //重写接口请求完成事件

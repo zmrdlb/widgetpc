@@ -58,12 +58,14 @@ define(['$'],function($){
 		complete: function(jqXHR, textStatus){},
 		success: function(data, textStatus, jqXHR){},
 		error: function(jqXHR, textStatus, errorThrown){ alert('网络错误'); },
-		fail: function(result){},
+		fail: function(result){}, //当业务处理错误时，返回统一处理业务错误
+		dealdata: function(result){return result.data;}, //当业务处理成功时，返回统一处理的数据
 		//自定义数据
 		customconfig:{
 			mode: 'ajax', //使用什么方式请求，默认是ajax(ajax方式默认返回的是json格式的数据。也可通过在和method参数同级的位置设置dataType参数来改变默认的json设置)。可用的参数有ajax|jsonp|script
 		    deallogin: true, //是否统一处理未登陆错误
 		    dealerror: true, //是否统一处理业务错误
+		    dealdata: true, //当业务处理成功时，是否统一处理返回的数据。注意：只有当dealerror为true时，dealdata为true才有效。否则不会调用dealdata方法
 		    queue: false, //接口请求是否进行队列控制，即当前请求完成后才可以进行下一个请求
 		    getInter: function(interobj){} //获取接口请求实例对象。如interobj为$.ajax()返回的对象
 		}
