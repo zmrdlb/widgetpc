@@ -14,7 +14,7 @@
               
               //请求数据完成后调用check。注意要控制filter()返回的true|false
               //如，当接口返回没有更多了，则要让filter()返回false
-              lazyload.check();
+              lazyload.check(); //如果设置参数
         }
  *  });
  *  
@@ -39,6 +39,7 @@ define(function(){
      *     如果filter返回true,则达到lazyload的条件时时会触发call回调，否则不触发。默认一直返回true。
      *     如果filter不是function类型，则使用默认方式返回true。
      *     初始化的时候，filter返回必须为true
+     *   firstcheck {Boolean} true 组件初始化时，是否执行check方法。如果设置为false,则首次加载数据得用户调用fire()方法
      * }
    */
   function Lazyload(opt){
@@ -47,7 +48,8 @@ define(function(){
           container: $(window),
           offset: 50,
           filter: function(){return true;},
-          call: function(){}
+          call: function(){},
+          firstcheck: true
       },opt || {});
       
       if(this.container.size() == 0){
@@ -60,7 +62,10 @@ define(function(){
           this.iswindow = false;
       }
       this.checkscroll = false; //是否是check检测引发的滚动
-      this.check(true);
+      this.isfirst = true; //是否是首次触发call
+      if(this.firstcheck){
+          this.check();
+      }
       this.listenScroll();
   }
   
@@ -70,7 +75,7 @@ define(function(){
    *    1. Lazyload创建时自动执行call请求数据
    *    2. 极限情况解决：如果第一次调用call，加载了2条数据，此时还没铺满container，则无法触发container的scroll事件，则无法执行lazyload
    */
-  Lazyload.prototype.check = function(isfirst){
+  Lazyload.prototype.check = function(){
       if(!this.filter()){
           return;
       }
@@ -82,7 +87,7 @@ define(function(){
           this.setScrollTop(1);
           setTimeout($.proxy(function(){
               if(this.getScrollTop() == 0){
-                  this.call(isfirst);
+                  this.fire();
               }else{
                   this.setScrollTop(0);
               }
@@ -122,6 +127,15 @@ define(function(){
       }
   };
   /**
+   * 触发执行call 
+   */
+  Lazyload.prototype.fire = function(){
+      if(this.filter()){
+          this.call(this.isfirst);
+          this.isfirst = false;
+      }
+  };
+  /**
    * 监听scroll 
    */
   Lazyload.prototype.listenScroll = function(){
@@ -136,8 +150,8 @@ define(function(){
           stop();
           timer = setTimeout(function(){
               var canlazy = _this.container.height()+_this.container.scrollTop()+_this.offset >= _this.getScrollHeight();
-              if(canlazy && _this.filter()){
-                  _this.call();
+              if(canlazy){
+                  _this.fire();
               }
           }, 300);
       });
