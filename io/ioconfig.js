@@ -31,6 +31,7 @@ define(['$'],function($){
 	that.login = {
 		url: '', //未登情况下跳转的页面
 		key: 'go', //跳转到url指定页面传递当前页面地址的键值名称
+		deal: function(data){}, //有的情况下，不是跳转登录url，而且弹登录弹层。则此时将url设置为''，将登陆弹层弹出处理写在此方法中
 		filter: function(data){return false;} //如果此函数返回true则跳转url指定的页面。data是接口返回的数据
 	};
 	/**

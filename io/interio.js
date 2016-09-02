@@ -92,18 +92,23 @@ define(['$','libio/ioconfig'],function($,$ioconfig){
 		var dealerror = conf.customconfig.dealerror;
 		var dealdata = conf.customconfig.dealdata;
 		conf.success = function(data, textStatus, jqXHR){ //重写success方法，用来处理未登陆问题
-			if(deallogin && $ioconfig.login.url != '' && typeof $ioconfig.login.filter == 'function'){ //监测是否有未登陆错误处理
-				if($ioconfig.login.filter(data)){
-					var loginurl = $ioconfig.login.url;
-					var search = $ioconfig.login.key+'='+encodeURIComponent(location.href);
-					if(loginurl.lastIndexOf('?') != -1){
-						loginurl = loginurl.replace(/\?/,'?'+search+'&');
-					}
-					else{
-						loginurl = loginurl+'?'+search;
-					}
-					location.href = loginurl;
-					return;
+			if(deallogin && typeof $ioconfig.login.filter == 'function'){ //监测是否有未登陆错误处理
+				if($ioconfig.login.filter(data)){ //未登录
+				    if($ioconfig.login.url != ''){ //跳转url
+				        var loginurl = $ioconfig.login.url;
+                        var search = $ioconfig.login.key+'='+encodeURIComponent(location.href);
+                        if(loginurl.lastIndexOf('?') != -1){
+                            loginurl = loginurl.replace(/\?/,'?'+search+'&');
+                        }
+                        else{
+                            loginurl = loginurl+'?'+search;
+                        }
+                        location.href = loginurl;
+                        return;
+				    }else if(typeof $ioconfig.login.deal == 'function'){
+				        $ioconfig.login.deal(data);
+				        return;
+				    }
 				}
 			}
 			if(dealerror && typeof $ioconfig.error.filter == 'function'){ //检测是否有业务错误处理
