@@ -8,6 +8,7 @@
  * 	 var layer = new $bombLayer();
  *   layer.showcal.add(function(type){switch(type){case 'before':console.log('层显示前');break; case 'after':console.log('层显示后');break;}});
  *   layer.hidecal.add(function(type){switch(type){case 'before':console.log('层隐藏前');break; case 'after':console.log('层隐藏后');break;}});
+ *   layer.pos.poscal.add(function(){console.log('layer定位后回调')});
  *   layer.setContent('<div node="content"></div>'); //设置layer层里面的内容
  *   layer.getNodes(['content']); // 获取class="js-content"的节点
  *   layer.show(); //显示层
@@ -101,7 +102,7 @@ define(['$','liblayers/layer','liblayers/mask','libinherit/extendClass','liblaye
 		this.mask && this.mask.hide();
 	};
 	/**
-	 * 弹层销毁 
+	 * 弹层销毁
 	 */
 	bombLayer.prototype.destroy = function(){
 		this.layer.off($deviceevtname.click, '.js-close');

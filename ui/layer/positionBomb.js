@@ -7,13 +7,14 @@
  * @example
  * requirejs(['layer/positionBomb'],function($positionBomb){
  * 	 var pos = new $positionBomb({layer:层dom节点});
+ * 	 pos.poscal.add(function(){console.log('layer定位后回调')});
  * });
  * */
 define(['$','libcompatible/csssuport','libevt/winscroll','libevt/scroll','libevt/winresize','libevt/resize'],function($,$csssuport,$winscroll,$scroll,$winresize,$resize){
 	//判断是否可以使用position:fixed方式定位
     var canFix = $csssuport.fixed;
 	/**
-	 * 定位算法 
+	 * 定位算法
 	 */
 	function setpos(domopt,posopt){
 		var cssopt = {},layer = domopt.layer,offcon = domopt.offcon;
@@ -77,6 +78,8 @@ define(['$','libcompatible/csssuport','libevt/winscroll','libevt/scroll','libevt
             minheight: 0, //定位计算时，待定位层layer的最小高度
             custompos: null //用户自定义定位方法。如果声明此方法，则不会使用系统默认的方法设置pos的定位参数，而是把定位参数pos传递给此方法
 		},config || {});
+        this.poscal = $.Callbacks(); //setpos后的回调
+
 		var that = this;
 		//初步检测定位参考容器
 		domopt.offcon = domopt.layer.offsetParent();
@@ -95,7 +98,7 @@ define(['$','libcompatible/csssuport','libevt/winscroll','libevt/scroll','libevt
 		if(domopt.offpage && posopt.fixed && canFix){ //如果定位容器是当前页面、固定定位、可使用fixed定位。则用fixed定位
 			domopt.position = 'fixed';
 		}
-		else{ 
+		else{
 			domopt.position = 'absolute';
 			if(posopt.fixed) { //如果固定定位，则监听scroll事件
 			    islisscroll = true;
@@ -149,6 +152,7 @@ define(['$','libcompatible/csssuport','libevt/winscroll','libevt/scroll','libevt
 		}
 		else{
 			setpos(this.domopt,this.posopt);
+            this.poscal.fire();
 			return true;
 		}
 	};
