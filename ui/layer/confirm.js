@@ -68,16 +68,16 @@ define(['$','liblayers/bombLayer','liblayers/tpl','libcompatible/deviceevtname',
 	}
 	$extendClass(confirm,$bombLayer);
 	/**
-	 * 设置confirm内容区具有[node="content"]属性的节点的html 
+	 * 设置confirm内容区具有[node="content"]属性的节点的html
      * @param {String} html
 	 */
 	confirm.prototype.setMyContent = function(html){
-		if(typeof html == 'string' && this.contentnode.size() > 0){
+		if(typeof html == 'string' && this.contentnode.length > 0){
 			this.contentnode.html(html);
 		}
 	};
 	/**
-	 * 组件销毁 
+	 * 组件销毁
 	 */
 	confirm.prototype.destroy = function(){
 		this.layer.off($deviceevtname.click, '.js-ok');

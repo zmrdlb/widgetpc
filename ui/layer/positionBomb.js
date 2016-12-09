@@ -66,7 +66,7 @@ define(['$','libcompatible/csssuport','libevt/winscroll','libevt/scroll','libevt
 		if(domopt.layer && typeof domopt.layer == 'string'){
 			domopt.layer = $(domopt.layer);
 		}
-		if(!domopt.layer || domopt.layer.size() == 0){
+		if(!domopt.layer || domopt.layer.length == 0){
 			throw new Error('传入的定位层节点无效');
 		}
 		var posopt = $.extend({

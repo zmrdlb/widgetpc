@@ -10,7 +10,7 @@
  * */
 define(['$'],function($){
 	return function(node){
-		if(!node || node.size() == 0){
+		if(!node || node.length == 0){
 			throw new Error('positionWin组件传入的参数node无效');
 		}
 		//待返回的位置信息

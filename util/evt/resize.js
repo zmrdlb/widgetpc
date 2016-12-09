@@ -1,5 +1,5 @@
 /**
- * @fileoverview 
+ * @fileoverview
  *   给指定元素创建resize事件监听类
  * @author mingrui| mingrui@staff.sina.com.cn
  * @version 1.0 | 2015-08-27
@@ -13,10 +13,10 @@
 define(['$','libevt/delayevt'],function($,$delayevt){
 	/**
 	 * @param {Element} *node 元素节点
-	 * @param {JSON} config 延迟配置。同evt/delayevt类的初始化参数 
+	 * @param {JSON} config 延迟配置。同evt/delayevt类的初始化参数
 	 */
 	function resize(node,config){
-		if(node.size() == 0){
+		if(node.length == 0){
 			return;
 		}
 		var opt = $.extend({
@@ -28,9 +28,9 @@ define(['$','libevt/delayevt'],function($,$delayevt){
 			that.delay.start();
 		});
 	}
-	/** 
+	/**
 	 * 添加scroll事件监听
-     * @param {JSON} opt 
+     * @param {JSON} opt
      * {
      *   call: function//事件发生时触发的回调
 	 *   filter: function //过滤条件。filter返回为true则才触发call。不填此项则默认不过滤
@@ -40,7 +40,7 @@ define(['$','libevt/delayevt'],function($,$delayevt){
 		this.delay.subscribe(opt);
 	};
 	/**
-	 * 移除监听 
+	 * 移除监听
      * @param {Object} opt 和调用listen时一样的参数引用
 	 */
 	resize.prototype.unlisten = function(opt){

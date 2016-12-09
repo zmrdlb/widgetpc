@@ -23,13 +23,13 @@ define(function(){
 			return Object.prototype.toString.call(data) == '[object Object]' && data.constructor == Object;
 		},
 		/**
-		 * 数据类型是否是object。不仅仅限于是纯的Object实例化的对象 
+		 * 数据类型是否是object。不仅仅限于是纯的Object实例化的对象
 		 */
 		isObjectType: function(data){
 		    return Object.prototype.toString.call(data) == '[object Object]';
 		},
 		/**
-		 * 是否是function 
+		 * 是否是function
          * @param {Object} data
 		 */
 		isFunction: function(data){
@@ -64,11 +64,11 @@ define(function(){
 			return typeof data == 'number';
 		},
 		/**
-		 * 是否是一个有效的jquery dom对象 
+		 * 是否是一个有效的jquery dom对象
  		 * @param {Object} node
 		 */
 		isValidJqueryDom: function(node){
-			return node != null && this.isFunction(node.size) && node.size() > 0;
+			return node != null && this.isFunction(node.size) && node.length > 0;
 		}
 	};
 });

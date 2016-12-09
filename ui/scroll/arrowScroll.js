@@ -32,7 +32,7 @@ define(['$','libscroll/scroll','libinherit/extendClass','libdom/checknode','libb
             'x': ['outerWidth','innerWidth','width'],
             'y': ['outerHeight','innerHeight','height']
         };
-            
+
         function getMyLen(node,type){
             var funArr = _typeSizeName[type];
             var len = 0;
@@ -48,7 +48,7 @@ define(['$','libscroll/scroll','libinherit/extendClass','libdom/checknode','libb
             var childs = this.scrollNode.children();
             var itemNode = childs.eq(0);
             var itemlen = getMyLen(itemNode,this.type);
-            var alllen = itemlen*childs.size();
+            var alllen = itemlen*childs.length;
             if(opt.num <= 0){
                 if(this.type == 'x'){
                     var len = this.conNode.width();
@@ -79,12 +79,12 @@ define(['$','libscroll/scroll','libinherit/extendClass','libdom/checknode','libb
             this.nextNode.hide();
         }
     }
-    
+
     //继承
     $extendClass(ArrowScroll, $scroll);
-    
+
     /**
-     * 改变节点的状态 
+     * 改变节点的状态
      */
     ArrowScroll.prototype.changeArrowState = function(node,yes){
         if(this.disabledClass != ''){
@@ -102,7 +102,7 @@ define(['$','libscroll/scroll','libinherit/extendClass','libdom/checknode','libb
         }
     };
     /**
-     * 渲染上下节点状态 
+     * 渲染上下节点状态
      */
     ArrowScroll.prototype.renderArrow = function(){
         if(this.canprev()){
@@ -116,7 +116,7 @@ define(['$','libscroll/scroll','libinherit/extendClass','libdom/checknode','libb
             this.changeArrowState(this.nextNode,false);
         }
     };
-    
+
     ArrowScroll.prototype.bindEvt = function(){
         //上一页
         this.root.on('click',this.prevSelector,$.proxy(function(e){
@@ -129,6 +129,6 @@ define(['$','libscroll/scroll','libinherit/extendClass','libdom/checknode','libb
             this.renderArrow();
         },this));
     };
-    
+
     return ArrowScroll;
 });

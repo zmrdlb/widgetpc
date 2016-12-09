@@ -33,7 +33,7 @@ define(['$','liblayers/layer','liblayers/mask','libinherit/extendClass','liblaye
      *      }
 	 */
 	function bombLayer(config){
-		if(!config.container || config.container.size() == 0){
+		if(!config.container || config.container.length == 0){
 			config.container = $('<div></div>').appendTo('body');
 			this._newcontainer = true; //说明是新创建的容器
 		}
@@ -79,7 +79,7 @@ define(['$','liblayers/layer','liblayers/mask','libinherit/extendClass','liblaye
 		if($checkDataType.isArray(nodenamearr)){
 			$.each(nodenamearr,function(index,name){
 				var node = that.layer.find('.js-'+name);
-				if(node.size() > 0){
+				if(node.length > 0){
 					result[name] = node;
 				}
 			});
