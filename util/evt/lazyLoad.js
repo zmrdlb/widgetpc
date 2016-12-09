@@ -5,16 +5,29 @@
  * @author mingrui| mingrui@staff.sina.com.cn
  * @version 1.0 | 2016-07-28
  * @example
+ *  var loading = false;
  *  var lazyload = new Lazyload({
  * 		container: $(window),
  *      //首次filter必须返回true
-        filter: function(){if(数据正在请求){return false;}else{数据请求完毕，可以再进行下一次请求return true;}}
+        filter: function(){return !loading;}
         call: function(isfirst){
-              //isfirst为true 说明是组件初始化首次触发
 
-              //请求数据完成后调用check。注意要控制filter()返回的true|false
-              //如，当接口返回没有更多了，则要让filter()返回false
-              lazyload.check(); //如果设置参数
+            //请求接口
+            loading = true;
+
+            //接口返回
+             if(isfirst){
+                  //说明是组件初始化首次触发
+             }
+
+             var more = 1|0; //接口返回是否还有更多数据
+
+             if(more == 1){
+                  loading = false;
+                  lazyload.check();
+             }else{
+                 lazyload.destroy();
+             }
         }
  *  });
  *
@@ -52,7 +65,7 @@ define(function(){
           firstcheck: true
       },opt || {});
 
-      if(this.container.length == 0){
+      if(this.container.size() == 0){
           throw new Error('lazyload传入的container节点无效');
       }
 
