@@ -18,7 +18,7 @@
  * */
 define(['$','liblayers/positionBomb','libcompatible/deviceevtname'],function($,$positionBomb,$deviceevtname){
 	/**
-	 * 遮罩类——创建遮罩dom并添加到指定容器中 
+	 * 遮罩类——创建遮罩dom并添加到指定容器中
      * @param {Element} container 遮罩存放容器，默认为$('body')
      * @param {JSON} config 遮罩配置参数，默认信息及说明如下opt代码处
 	 */
@@ -26,16 +26,21 @@ define(['$','liblayers/positionBomb','libcompatible/deviceevtname'],function($,$
 		container = container || $('body');
 		var that = this;
 		var opt = $.extend({
-			bgcolor: '#222', //背景色
+			bgcolor: '#000', //背景色
 			zIndex: 1, //遮罩z-index
-			opacity: 0.5, //遮罩透明度
-			show: false //创建遮罩后默认是否显示
+			opacity: 0.6, //遮罩透明度
+			show: false, //创建遮罩后默认是否显示
+			custom: {
+				show: null, //用户自定义显示层的方法。如果此方法存在，则不用默认的显示层方法
+				hide: null //用户自定义隐藏层的方法。如果此方法存在，则不用默认的隐藏层方法
+			}
 		},config || {});
 		var cssstr = 'position:absolute;background:'+opt.bgcolor+';'+(opt.show?'':'display:none;')+'z-index:'+opt.zIndex+';';
 		this.container = container; //遮罩容器
 		this.mask = $('<div style="'+cssstr+'"></div>');
 		this.mask.appendTo(container);
 		this.mask.css('opacity',opt.opacity);
+		this.custom  = opt.custom; //自定义方法
 		this.pos = new $positionBomb({layer:this.mask},{mode:'full'});
 		//绑定事件
 		this.clickcal = $.Callbacks(); //遮罩点击后的回调
@@ -44,20 +49,30 @@ define(['$','liblayers/positionBomb','libcompatible/deviceevtname'],function($,$
 		});
 	}
 	/**
-	 * 显示遮罩 
+	 * 显示遮罩
 	 */
 	mask.prototype.show = function(){
-		this.mask.show();
+		if(typeof this.custom.show == 'function'){
+			this.custom.show(this.mask);
+		}
+		else{
+			this.mask.show();
+		}
 		this.pos.setpos();
 	};
 	/**
-	 * 隐藏遮罩 
+	 * 隐藏遮罩
 	 */
 	mask.prototype.hide = function(){
-		this.mask.hide();
+		if(typeof this.custom.hide == 'function'){
+			this.custom.hide(this.mask);
+		}
+		else{
+			this.mask.hide();
+		}
 	};
 	/**
-	 * 销毁遮罩 
+	 * 销毁遮罩
 	 */
 	mask.prototype.destroy = function(){
 		if(this.mask != null){

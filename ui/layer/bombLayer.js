@@ -29,6 +29,7 @@ define(['$','liblayers/layer','liblayers/mask','libinherit/extendClass','liblaye
      * 		   mask: { //遮罩信息参数，具体说明可见方法layer/mask中的config说明。在此基础上进行以下扩展
      * 			  mask: true, //是否创建遮罩
      *            cmlhide: false //点击遮罩是否关闭弹层
+     *            //其他查看mask.js中的配置
      * 		   }
      *      }
 	 */
