@@ -7,9 +7,25 @@
  *  transQueueRequest {Function} 对一组请求进行单独的队列控制依次请求。全部请求完毕后进行通知。
  * @example
  * requirejs(['libio/interio'],function($interio){
- * 	 $interio.transRequest('inter1name',{
-		success: function(data){},
-		complete: function(){}
+ *   var basehost = 'http://127.0.0.1:8000';
+ *
+ * 	 $interio.transRequest({
+		 url: basehost+'/listdata',
+		 method:'POST',
+		 data: {'name': 'zmrdlb'}
+	 },{
+		 success: function(data){
+			 console.log(data);
+		 }
+		 // fail: function(){
+		 //     console.log('覆盖统一fail处理');
+		 // },
+		 // error: function(){
+		 //     console.log('覆盖统一error处理');
+		 // },
+		 // complete: function(){
+		 //     console.log('完成');
+		 // }
 	 });
  * });
  * */

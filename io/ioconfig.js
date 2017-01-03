@@ -10,16 +10,21 @@
  *  globalSetup {Function} 设置全局ajax配置
  * @example
  * requirejs(['libio/ioconfig'],function($ioconfig){
- * 	 //配置未登陆统一处理相关参数
-	 $ioconfig.login.url = 'http://baidu.com/';
-	 $ioconfig.login.filter = function(data){
-		return data.code == 'A0003';
-	 };
-	 //配置接口
-	 $ioconfig.setTrans([
-		{name: 'inter1name', args: {url:baseUrl+'inter1.json',method:'GET'}},
-		{name: 'inter2name', args: {url:baseUrl+'inter2.json',method:'GET',customconfig:{deallogin:false//不统一处理未登陆错误}}}
-	 ]);
+	 	 //统一处理未登录
+		 $ioconfig.login.filter = function(result){
+		 	return result.code == 'A0002';
+		 };
+		 $ioconfig.login.url = 'http://baidu.com/';
+
+		 //所有接口的io业务错误统一处理
+		 $ioconfig.fail.filter = function(result) {
+		 	return result.code != 'A0001';
+		 };
+		 $ioconfig.iocall.fail = function(result){
+		 	alert(result.errmsg || '网络错误');
+		 };
+
+		 $ioconfig.ioargs.crossDomain = true;
  * });
  * */
 define(['$'],function($){
