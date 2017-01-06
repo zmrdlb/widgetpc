@@ -6,9 +6,10 @@
  * @example
  * requirejs(['$','layer/layer'],function($,$layer){
  * 	 var layer = new $layer($('body'));
- *   layer.showcal.add(function(type){switch(type){case 'before':console.log('层显示前');break; case 'after':console.log('层显示后');break;}});
- *   layer.hidecal.add(function(type){switch(type){case 'before':console.log('层隐藏前');break; case 'after':console.log('层隐藏后');break;}});
- *   layer.show(); //显示层
+ *   layer.showbeforecal.add(function(){console.log('层显示前');});
+ *   layer.hidebeforecal.add(function(){console.log('层隐藏前');});
+ *   layer.showaftercal.add(function(){console.log('层显示后');});
+ *   layer.hideaftercal.add(function(){console.log('层隐藏后');});
  *   layer.hide(); //隐藏层
  *   layer.layer; //层dom节点对象
  *   layer.container; //浮层容器
@@ -37,12 +38,14 @@ define(['$'],function($){
 		this.container = container; //浮层容器
 		this.layer = $('<div'+(opt.classname == ''?'':' class="'+opt.classname+'"')+' style="'+cssstr+'"></div>');
 		this.layer.appendTo(container);
-		this.showcal = $.Callbacks(); //层显示后的回调
-		this.hidecal = $.Callbacks(); //层隐藏后的回调
+		this.showbeforecal = $.Callbacks(); //层显示前的回调
+		this.showaftercal = $.Callbacks(); //层显示后的回调
+		this.hidebeforecal = $.Callbacks(); //层隐藏前的回调
+		this.hideaftercal = $.Callbacks(); //层隐藏后的回调
 		this.custom  = opt.custom; //自定义方法
 	}
 	/**
-	 * 设置层内容 
+	 * 设置层内容
  	 * @param {Element|String} *content html字符串或者节点对象
 	 */
 	layer.prototype.setContent = function(content){
@@ -57,18 +60,35 @@ define(['$'],function($){
 		}
 	};
 	/**
-	 * 显示层。会触发showcal回调 
+	 * 显示层。
+	 */
+	layer.prototype._show = function(){
+		if(typeof this.custom.show == 'function'){
+			this.custom.show(this.layer);
+		}
+		else{
+			this.layer.show();
+		}
+	};
+	/**
+	 * 显示层。会触发showcal回调
 	 */
 	layer.prototype.show = function(){
 		if(!this.isshow()){
-			this.showcal.fire('before'); //层显示前回调
-			if(typeof this.custom.show == 'function'){
-				this.custom.show(this.layer);
-			}
-			else{
-				this.layer.show();
-			}
-			this.showcal.fire('after'); //层显示后回调
+			this.showbeforecal.fire(); //层显示前回调
+			this._show();
+			this.showaftercal.fire(); //层显示后回调
+		}
+	};
+	/**
+	 * 隐藏层。
+	 */
+	layer.prototype._hide = function(){
+		if(typeof this.custom.hide == 'function'){
+			this.custom.hide(this.layer);
+		}
+		else{
+			this.layer.hide();
 		}
 	};
 	/**
@@ -76,18 +96,13 @@ define(['$'],function($){
 	 */
 	layer.prototype.hide = function(){
 		if(this.isshow()){
-			this.hidecal.fire('before'); //层隐藏前回调
-			if(typeof this.custom.hide == 'function'){
-				this.custom.hide(this.layer);
-			}
-			else{
-				this.layer.hide();
-			}
-			this.hidecal.fire('after'); //层隐藏后回调
+			this.hidebeforecal.fire(); //层隐藏前回调
+			this._hide();
+			this.hideaftercal.fire(); //层隐藏后回调
 		}
 	};
 	/**
-	 * 销毁层 
+	 * 销毁层
 	 */
 	layer.prototype.destroy = function(){
 		if(this.layer != null){
@@ -101,7 +116,7 @@ define(['$'],function($){
 	};
 	/**
 	 * 判断层是否显示
-	 * @return {Boolean} true|false 
+	 * @return {Boolean} true|false
 	 */
 	layer.prototype.isshow = function(){
 		return this.layer.css('display') != 'none';

@@ -54,8 +54,8 @@ define(['$','liblayers/bombLayer','liblayers/tpl','libcompatible/deviceevtname',
 		//事件绑定
 	    this.layer.on($deviceevtname.click, '.js-ok', function(e){
 	    	e.preventDefault();
-	    	that.hide();
 	    	that.okcal.fire(e);
+			that.hide();
 	    });
 	}
 	$extendClass(alert,$bombLayer);

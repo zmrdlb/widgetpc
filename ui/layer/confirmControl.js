@@ -32,8 +32,8 @@ define(['liblayers/confirm','liblayers/baseControl','libinherit/extendClass'],fu
 	/**
      * confirm工厂控制器
      */
-	function ConfirmControl(){
-		ConfirmControl.superclass.constructor.call(this);
+	function ConfirmControl(hidedestroy){
+		ConfirmControl.superclass.constructor.call(this,hidedestroy);
 		this._okcal = function(){}; //点击ok的回调私有存储器
 		this._cancelcal = function(){}; //点击cancel的回调私有存储器
 		this._funarr = ['ok','cancel']; //可控制的回调方法名
@@ -52,6 +52,7 @@ define(['liblayers/confirm','liblayers/baseControl','libinherit/extendClass'],fu
 			this._layerobj.cancelcal.add(function(e){
 				that._cancelcal();
 			});
+			this._addcall();
 		}
 		return this._layerobj;
 	};

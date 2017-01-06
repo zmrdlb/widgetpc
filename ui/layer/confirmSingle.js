@@ -13,7 +13,6 @@
 				].join('')
 			}
 		});
-		$confirmSingle.getlayerobj()； //layer/confirm类对象
 		$confirmSingle.show({
 		    content: '您还未登陆'
 		},{
@@ -24,6 +23,7 @@
 				console.log('点击等下说');
 			}
 		});
+        $confirmSingle.getlayerobj()； //layer/confirm类对象
    });
  * */
 define(['liblayers/confirmControl'],function($confirmControl){

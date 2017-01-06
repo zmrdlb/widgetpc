@@ -30,8 +30,8 @@ define(['liblayers/alert','liblayers/baseControl','libinherit/extendClass'],func
     /**
      * alert工厂控制器
      */
-	function AlertControl(){
-		AlertControl.superclass.constructor.call(this);
+	function AlertControl(hidedestroy){
+		AlertControl.superclass.constructor.call(this,hidedestroy);
 		this._okcal = function(){}; //点击ok的回调私有存储器
 		this._funarr = ['ok']; //可控制的回调方法名
 	}
@@ -46,6 +46,7 @@ define(['liblayers/alert','liblayers/baseControl','libinherit/extendClass'],func
 			this._layerobj.okcal.add(function(e){
 				that._okcal();
 			});
+            this._addcall();
 		}
 		return this._layerobj;
 	};

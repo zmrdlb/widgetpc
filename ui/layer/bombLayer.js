@@ -6,8 +6,10 @@
  * @example
  * requirejs(['liblayers/bombLayer'],function($bombLayer){
  * 	 var layer = new $bombLayer();
- *   layer.showcal.add(function(type){switch(type){case 'before':console.log('层显示前');break; case 'after':console.log('层显示后');break;}});
- *   layer.hidecal.add(function(type){switch(type){case 'before':console.log('层隐藏前');break; case 'after':console.log('层隐藏后');break;}});
+ *    layer.showbeforecal.add(function(){console.log('层显示前');});
+ *   layer.hidebeforecal.add(function(){console.log('层隐藏前');});
+ *   layer.showaftercal.add(function(){console.log('层显示后');});
+ *   layer.hideaftercal.add(function(){console.log('层隐藏后');});
  *   layer.pos.poscal.add(function(){console.log('layer定位后回调')});
  *   layer.setContent('<div class="js-content"></div>'); //设置layer层里面的内容
  *   layer.getNodes(['content']); // 获取class="js-content"的节点
@@ -91,31 +93,39 @@ define(['$','liblayers/layer','liblayers/mask','libinherit/extendClass','liblaye
 	 * 显示弹层
 	 */
 	bombLayer.prototype.show = function(){
-		bombLayer.superclass.show.call(this);
-		this.pos.setpos();
-		this.mask && this.mask.show();
+		if(!this.isshow()){
+			this.showbeforecal.fire(); //层显示前回调
+			this.mask && this.mask.show();
+			this._show();
+			this.pos.setpos();
+			this.showaftercal.fire(); //层显示后回调
+		}
 	};
 	/**
 	 * 隐藏弹层
 	 */
 	bombLayer.prototype.hide = function(){
-		bombLayer.superclass.hide.call(this);
-		this.mask && this.mask.hide();
+		if(this.isshow()){
+			this.hidebeforecal.fire(); //层隐藏前回调
+			this.mask && this.mask.hide();
+			this._hide();
+			this.hideaftercal.fire(); //层隐藏后回调
+		}
 	};
 	/**
 	 * 弹层销毁
 	 */
 	bombLayer.prototype.destroy = function(){
 		this.layer.off($deviceevtname.click, '.js-close');
+		if(this._newcontainer){
+			this.container.remove();
+		}
 		bombLayer.superclass.destroy.call(this);
 		this.pos.destroy();
 		if(this.mask){
             this.mask.destroy();
         }
-		if(this._newcontainer){
-			this.container.remove();
-			this._newcontainer = null;
-		}
+		this._newcontainer = null;
 	};
 	return bombLayer;
 });
