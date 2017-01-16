@@ -71,7 +71,13 @@ define(['$','libform/verifystring'],function($,VerifyString){
 
         this.root = root;
         this.inputconfig = inputconfig || {};
-        this._verifyobj = [];
+        /**
+         * {
+         *    表单控件的name属性：表单验证实例化对象
+         * }
+         * @type {Object}
+         */
+        this._verifyobj = {};
 
         this.bind();
     }
@@ -84,11 +90,20 @@ define(['$','libform/verifystring'],function($,VerifyString){
         var _this = this;
         this.root.find('[verify]').each(function(){
             var node = $(this);
-            var verifyobj = new verifyClass[node.attr('verify')](node,_this.inputconfig[node.attr('name')] || {});
-            _this._verifyobj.push(verifyobj);
+            var name = node.attr('name');
+            var verifyobj = new verifyClass[node.attr('verify')](node,_this.inputconfig[name] || {});
+            _this._verifyobj[name] = verifyobj;
         });
     }
 
+    /**
+     * 获取某个表单控件的验证实例对象
+     * @param  {String} name 表单控件的name属性
+     * @return {instance of Verify的各种子类}
+     */
+    FormVerify.prototype.getVerifyObj = function(name){
+        return this._verifyobj[name];
+    }
     /**
      * 验证
      * @return {
@@ -98,13 +113,14 @@ define(['$','libform/verifystring'],function($,VerifyString){
      */
     FormVerify.prototype.verify = function(){
         var err = null, data = {};
-        $.each(this._verifyobj,function(index,verifyobj){
+        for(var name in this._verifyobj){
+            var verifyobj = this._verifyobj[name];
             err = verifyobj.verify();
-            data[verifyobj.root.attr('name')] = verifyobj.val();
+            data[name] = verifyobj.val();
             if(err != null){
-                return false;
+                break;
             }
-        });
+        }
         return {
             err: err,
             data: data
