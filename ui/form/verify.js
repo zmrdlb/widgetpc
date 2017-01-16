@@ -69,7 +69,7 @@ define(['$'],function($){
                 root.removeClass(config.errorclass);
                 config.errnode.html('');
             }else{
-                root.addClass(config.errorclass).focus();
+                root.addClass(config.errorclass);
                 if(config.errnode && config.errnode.length > 0){
                     config.errnode.html(err);
                 }
@@ -104,12 +104,15 @@ define(['$'],function($){
                return config.errmsg.required;
            }
        }
-       if(config.placeholder != null && val == config.placeholder){ //验证是否等于placeholder
-           return config.errmsg.placeholder;
-       }
 
-       if(config.pattern != null && !config.pattern.test(val)){
-           return config.errmsg.pattern;
+       if(val != ''){
+           if(config.placeholder != null && val == config.placeholder){ //验证是否等于placeholder
+               return config.errmsg.placeholder;
+           }
+
+           if(config.pattern != null && !config.pattern.test(val)){
+               return config.errmsg.pattern;
+           }
        }
 
        return null;
