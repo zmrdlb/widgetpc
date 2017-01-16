@@ -10,7 +10,7 @@
                         您的姓名：
                     </div>
                     <div class="control">
-                        <input class="g-input" placeholder="请填写您的姓名称呼" type="text" verify="string" required errornodeselector="#msg-error-name" />
+                        <input class="g-input" placeholder="请填写您的姓名称呼" type="text" verify="string" required name="name" errornodeselector="#msg-error-name" />
                     </div>
                     <div class="msg-error" id="msg-error-name">
 
@@ -32,16 +32,6 @@
  *      requirejs(['$','libform/formverify'],function($,FormVerify){
  *          //表单验证
             var formverify = FormVerify.register($('#con-form'),{
-                url: {
-                    errmsg: {
-                        verifytype: '网址格式错误'
-                    }
-                },
-                mobile: {
-                    errmsg: {
-                        verifytype: '手机格式错误'
-                    }
-                },
                 email: {
                     errmsg: {
                         verifytype: '邮箱格式错误'

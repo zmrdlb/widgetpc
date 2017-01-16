@@ -24,8 +24,8 @@ function($,Pattern,Verify,ExtendClass,Util){
          //新增参数
          Util.merge(this.config,{
              //以下配置首先取dom中的属性配置。也可以在opts传入覆盖
-             minlength: this.root.attr('minlength') || null, //如果填写了数据，最小长度
-             maxlength: this.root.attr('maxlength') || null, //如果填写了数据，最大长度
+             minlength: parseInt(this.root.attr('minlength')) || null, //如果填写了数据，最小长度
+             maxlength: parseInt(this.root.attr('maxlength')) || null, //如果填写了数据，最大长度
     //          数据验证类型，默认为null不验证。可枚举的类别如下：
     //          email 邮箱
     //   *         mobile 手机号码
