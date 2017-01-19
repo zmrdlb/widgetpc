@@ -10,9 +10,9 @@
 		curlayer.setconfig({
 			alert: {
 				frametpl: [
-				    '<div node="title"></div>',
-					'<div node="content"></div>',
-					'<div><a href="javascript:;" node="ok">好的</a></div>'
+				    '<div class="js-title"></div>',
+					'<div class="js-content"></div>',
+					'<div><a href="javascript:;" class="js-ok">好的</a></div>'
 				].join('')
 			}
 		});
@@ -38,8 +38,9 @@ define(['liblayers/alert','liblayers/baseControl','libinherit/extendClass'],func
 	$extendClass(AlertControl,$baseControl);
 	/**
 	 * 获取alert弹层
+	 * @param {Boolean} reset 是否重新渲染模板。默认为false
 	 */
-	AlertControl.prototype.getlayerobj = function(){
+	AlertControl.prototype.getlayerobj = function(reset){
 		var that = this;
 		if(this._layerobj == null){
 			this._layerobj = new $alert(this._defaultopt);
@@ -47,7 +48,11 @@ define(['liblayers/alert','liblayers/baseControl','libinherit/extendClass'],func
 				that._okcal();
 			});
             this._addcall();
-		}
+		}else{
+            if(reset){
+                this._layerobj.setContent(this._defaultopt.alert.frametpl);
+            }
+        }
 		return this._layerobj;
 	};
 	/**

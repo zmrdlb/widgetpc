@@ -10,8 +10,8 @@
 		curconfirm.setconfig({
 			confirm: {
 				frametpl: [
-					'<div node="content"></div>',
-					'<div><a href="javascript:;" node="ok">好的</a><a href="javascript:;" node="cancel">等下说</a></div>'
+					'<div class="js-content"></div>',
+					'<div><a href="javascript:;" class="js-ok">好的</a><a href="javascript:;" class="js-cancel">等下说</a></div>'
 				].join('')
 			}
 		});
@@ -40,9 +40,10 @@ define(['liblayers/confirm','liblayers/baseControl','libinherit/extendClass'],fu
 	}
 	$extendClass(ConfirmControl,$baseControl);
 	/**
-	 * 获取alert弹层
+	 * 获取confirm弹层
+	 * @param {Boolean} reset 是否重新渲染模板。默认为false
 	 */
-	ConfirmControl.prototype.getlayerobj = function(){
+	ConfirmControl.prototype.getlayerobj = function(reset){
 		var that = this;
 		if(this._layerobj == null){
 			this._layerobj = new $confirm(this._defaultopt);
@@ -53,7 +54,11 @@ define(['liblayers/confirm','liblayers/baseControl','libinherit/extendClass'],fu
 				that._cancelcal();
 			});
 			this._addcall();
-		}
+		}else{
+            if(reset){
+                this._layerobj.setContent(this._defaultopt.confirm.frametpl);
+            }
+        }
 		return this._layerobj;
 	};
 	/**

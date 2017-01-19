@@ -82,7 +82,7 @@ define(['$','libbase/checkDataType'],function($,$checkDataType){
 			for(var name in txt){
 				nodenamearr.push(name);
 			}
-			this.getlayerobj();
+			this.getlayerobj(true);
 			var nodearr = this._layerobj.getNodes(nodenamearr);
 			for(var name in nodearr){
 				$checkDataType.isString(txt[name]) && nodearr[name].html(txt[name]);
