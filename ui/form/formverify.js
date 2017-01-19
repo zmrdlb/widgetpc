@@ -50,9 +50,10 @@
             });
  *      })
  * */
-define(['$','libform/verifystring'],function($,VerifyString){
+define(['$','libform/verifystring','libform/verifynumber'],function($,VerifyString,VerifyNumber){
     var verifyClass = {
-        'string': VerifyString
+        'string': VerifyString,
+        'number': VerifyNumber
     };
     /**
      * 表单验证类
@@ -62,6 +63,7 @@ define(['$','libform/verifystring'],function($,VerifyString){
      *      name属性：根据配置的verify属性查看对应的类opts
      *          verify属性值和相应的类对应如下:
      *              string: VerifyString
+     *              number: VerifyNumber
      * }
      */
     function FormVerify(root,inputconfig){
@@ -125,22 +127,6 @@ define(['$','libform/verifystring'],function($,VerifyString){
             err: err,
             data: data
         };
-    }
-
-    /**
-     * 获取当前验证状态。注意：
-     *  如果里面有一个验证组件，配置的autoverify为false,则不要调用此方法，改为调用verify
-     * @return {Boolean} 获取当前组件的验证状态
-     */
-    FormVerify.prototype.verifystatus = function(){
-        var success = true;
-        $.each(this._verifyobj,function(index,verifyobj){
-            if(!verifyobj.verifyyes){
-                success = false;
-                return false;
-            }
-        });
-        return success;
     }
 
     /**

@@ -35,17 +35,15 @@ define(['$'],function($){
                  pattern: '正则表达式匹配不正确'
              },
              success: function(){}, //验证成功
-             fail: function(){} //验证失败
+             fail: function(err){} //验证失败 {String} err 失败信息
          };
 
          $.extend(true,_opt,opts);
          if(_opt.errornodeselector != null){
-             _opt.errnode = $(_opt.errornodeselector);
+             this.errnode = $(_opt.errornodeselector);
          }
 
          this.config = _opt;
-         this.successCal = $.Callbacks();
-         this.failCal = $.Callbacks();
          this.verifyyes = false; //验证是否成功
 
          this._verifytype = 'base'; //验证类型，字符串
@@ -56,24 +54,33 @@ define(['$'],function($){
     }
 
     /**
+     * 验证成功操作
+     * @return {[type]} [description]
+     */
+    Verify.prototype._onsuccess = function(){
+        this.root.removeClass(this.config.errorclass);
+        this.errnode.html('');
+    };
+    /**
+     * 验证失败操作
+     * @param {String} err 失败信息
+     * @return {[type]} [description]
+     */
+    Verify.prototype._onfail = function(err){
+        this.root.addClass(this.config.errorclass);
+        if(this.errnode && this.errnode.length > 0){
+            this.errnode.html(err);
+        }
+    };
+    /**
      * 绑定自动表单验证
      * 后续子类，可以根据dom类型来重写。基类以input,textarea为准
      * @return {[type]} [description]
      */
     Verify.prototype._bindAutoverify = function(){
         var config = this.config, root = this.root, _this = this;
-
         root.on('blur',function(e){
-            var err = _this.verify();
-            if(err == null){
-                root.removeClass(config.errorclass);
-                config.errnode.html('');
-            }else{
-                root.addClass(config.errorclass);
-                if(config.errnode && config.errnode.length > 0){
-                    config.errnode.html(err);
-                }
-            }
+            _this.verify();
         }).on('focus',function(e){
             root.removeClass(config.errorclass);
         });
@@ -125,15 +132,14 @@ define(['$'],function($){
    */
     Verify.prototype.verify = function(value){
        var err = this._verify(value);
-
        if(err == null){
            this.verifyyes = true;
-           this.config.success();
-           this.successCal.fire();
+           this._onsuccess();
+           this.config.success.call(this);
        }else{
            this.verifyyes = false;
-           this.config.fail();
-           this.failCal.fire();
+           this._onfail(err);
+           this.config.fail.call(this,err);
        }
 
        return err;
