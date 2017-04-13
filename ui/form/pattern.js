@@ -48,21 +48,8 @@
      * @param {String} text
      * @returns {boolean} flag
      */
-    isIdcard: function (idCard) {
-      var num = idCard.toLowerCase().match(/\w/g);
-      if (idCard.match(/^\d{17}[\dx]$/i)) {
-        var sum = 0, times = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
-        for (var i = 0; i < 17; i++)
-          sum += parseInt(num[i], 10) * times[i];
-        if ("10x98765432".charAt(sum % 11) != num[17]) {
-          return false;
-        }
-        return !!idCard.replace(/^\d{6}(\d{4})(\d{2})(\d{2}).+$/, "$1-$2-$3");
-      }
-      if (idCard.match(/^\d{15}$/)) {
-        return !!idCard.replace(/^\d{6}(\d{2})(\d{2})(\d{2}).+$/, "19$1-$2-$3");
-      }
-      return false;
+    isIdcard: function (str) {
+        return /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(str);
     },
 
     /**
