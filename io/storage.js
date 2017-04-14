@@ -4,7 +4,7 @@
  * @author Zhang Mingrui | 592044573@qq.com
  * @return
  * */
-define(function(){
+define(['$'],function($){
     /**
      * 数据存储类
      * @param {[type]} opt [description]
@@ -53,7 +53,6 @@ define(function(){
                 num += rearr[2];
             }
             num = Number(num);
-            console.log(num);
             switch (suffix) {
                 case 'M':
                     diffhour += num*30*24;
@@ -71,7 +70,6 @@ define(function(){
 
         nowtime += diffhour*60*60*1000;
 
-        console.log(nowtime);
         return nowtime;
     };
 

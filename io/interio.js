@@ -1,5 +1,8 @@
 /**
- * @fileoverview io接口请求控制器
+ * @fileoverview io接口请求控制器，在$.ajax上进行进一步封装
+ *      1. 支持接口队列请求
+ *      2. 支持接口数据缓存
+ *      3. 支持接口统一业务错误及其他情况处理
  * @version 1.0 | 2015-06-28 版本信息
  * @author Zhang Mingrui | 592044573@qq.com
  * @return 更多详细信息参考代码里对应定义方法或属性位置的注释说明
@@ -29,7 +32,7 @@
 	 });
  * });
  * */
-define(['$','libio/ioconfig'],function($,$ioconfig){
+define(['$','libio/ioconfig','libio/storage'],function($,$ioconfig,Storage){
 	//请求队列控制类
 	function queueHandle(){
 		this.queue = []; //当前队列数据
@@ -157,10 +160,16 @@ define(['$','libio/ioconfig'],function($,$ioconfig){
 		};
 	}
 	function doajax(ioargs,iocall){
-		var interobj = null, getInter = ioargs.customconfig.getInter;
+		var interobj = null,
+			getInter = ioargs.customconfig.getInter,
+			storage = ioargs.customconfig.storage;
 		delete ioargs.customconfig;
 
-		interobj = $.ajax(ioargs).done(iocall.success).fail(iocall.error).always(iocall.complete)
+		interobj = $.ajax(ioargs).done(iocall.success).fail(iocall.error).always(iocall.complete).done(function(data){
+			if(storage && storage instanceof Storage){
+				storage.set(data);
+			}
+		});
 		if(interobj && typeof getInter == 'function'){
 			getInter(interobj);
 		}
@@ -170,9 +179,25 @@ define(['$','libio/ioconfig'],function($,$ioconfig){
      * @param {JSON} ioopt format后的接口参数
 	 */
 	function request(ioopt){
-		var _ioargs = ioopt.ioargs;
-		var _iocall = ioopt.iocall;
-		var mode = _ioargs.customconfig.mode;
+		var _ioargs = ioopt.ioargs,
+			_iocall = ioopt.iocall,
+			mode = _ioargs.customconfig.mode,
+			clearall = _ioargs.customconfig.clearall,
+			storage = _ioargs.customconfig.storage,
+			cachedata = null;
+
+		//清除所有缓存
+		if(clearall){
+			Storage.clear();
+		}
+
+		//是否有缓存
+		if(storage && storage instanceof Storage && ((cachedata = storage.get()) != null)){
+			_iocall.success(cachedata, 'success', null);
+			_iocall.complete();
+			return;
+		}
+
 		if(mode == 'ajax'){
 			if(_ioargs.dataType == undefined || _ioargs.dataType == ''){
 				_ioargs.dataType = 'json';
