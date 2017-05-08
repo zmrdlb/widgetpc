@@ -117,15 +117,15 @@ define(['$','liblayers/layer','liblayers/mask','libinherit/extendClass','liblaye
 	 */
 	bombLayer.prototype.destroy = function(){
 		this.layer.off($deviceevtname.click, '.js-close');
-		if(this._newcontainer){
-			this.container.remove();
-		}
 		bombLayer.superclass.destroy.call(this);
 		this.pos.destroy();
 		if(this.mask){
             this.mask.destroy();
         }
-		this._newcontainer = null;
+		if(this._newcontainer){
+			this.container.remove();
+		}
+		this._newcontainer = false;
 	};
 	return bombLayer;
 });
