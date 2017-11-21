@@ -21,7 +21,7 @@
      }
      /**
       * 返回当前空闲的workerControl对象
-      * @return {[type]} [description]
+      * @return {instance of Worker} 当前可用的线程对象.
       */
      workerControl.prototype.get = function(){
          var curworker = null;
@@ -41,8 +41,8 @@
 
      /**
       * 通知当前workerControl对象已经使用完毕
-      * @param {instance of workerControl} worker 如果提供了worker，则结束此线程；如果没提供，则结束第一个正在使用的线程
-      * @return {instance of workerControl | null} 当前结束的线程对象.没有则为null
+      * @param {instance of Worker} worker 如果提供了worker，则结束此线程；如果没提供，则结束第一个正在使用的线程
+      * @return {instance of Worker | null} 当前结束的线程对象.没有则为null
       */
      workerControl.prototype.end = function(worker){
          var curworker = null;
