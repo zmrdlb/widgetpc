@@ -31,7 +31,7 @@
  */
 
 define([
-  'jquery',
+  '$',
   'libevt/winresize'
 ],function(
   $,

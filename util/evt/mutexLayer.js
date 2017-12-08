@@ -18,7 +18,7 @@
  *      mutex.show();
  * });
  * */
-define(['jquery','libbase/uniqueNum','libbase/checknode','libbase/mergeobj','libbase/checkDataType'],
+define(['$','libbase/uniqueNum','libbase/checknode','libbase/mergeobj','libbase/checkDataType'],
 function($,$uniqueNum,$checknode,$mergeobj,$checkDataType){
     var bodyCall = $.Callbacks(); //点击body的回调
     $('body').on('click',function(e){
