@@ -110,7 +110,6 @@ define([
   }
 
   LineShow.prototype.destroy = function(){
-    console.log('销毁'+this.i);
     if(this.resize){
       WinResize.unlisten(this._listenResizeParams);
     }
