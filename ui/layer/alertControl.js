@@ -55,6 +55,10 @@ define(['liblayers/alert','liblayers/baseControl','libinherit/extendClass'],func
         }
 		return this._layerobj;
 	};
+
+	AlertControl.prototype.frameNodesKey = ['title','content','ok'];
+
+
 	/**
 	 * 销毁alert弹层
 	 */

@@ -69,7 +69,7 @@ define(['$','liblayers/layer','liblayers/mask','libinherit/extendClass','liblaye
 	}
 	$extendClass(bombLayer,$layer);
 	/**
-	 * 获取alert中具有node='指定名称'的节点列表。如果nodenamearr中指定的节点不存在，则不在结果中返回。举例
+	 * 获取alert中具有class='js-指定名称'的节点列表。如果nodenamearr中指定的节点不存在，则不在结果中返回。举例
      * @param {Array} nodenamearr 如['content','ok']
      * @return {
      * 	   content: 获取的节点
@@ -92,25 +92,15 @@ define(['$','liblayers/layer','liblayers/mask','libinherit/extendClass','liblaye
 	/**
 	 * 显示弹层
 	 */
-	bombLayer.prototype.show = function(){
-		if(!this.isshow()){
-			this.showbeforecal.fire(); //层显示前回调
-			this.mask && this.mask.show();
-			this._show();
-			this.pos.setpos();
-			this.showaftercal.fire(); //层显示后回调
-		}
+	bombLayer.prototype._subShow = function(){
+		this.mask && this.mask.show();
+		this.pos.setpos();
 	};
 	/**
 	 * 隐藏弹层
 	 */
-	bombLayer.prototype.hide = function(){
-		if(this.isshow()){
-			this.hidebeforecal.fire(); //层隐藏前回调
-			this.mask && this.mask.hide();
-			this._hide();
-			this.hideaftercal.fire(); //层隐藏后回调
-		}
+	bombLayer.prototype._subHide = function(){
+		this.mask && this.mask.hide();
 	};
 	/**
 	 * 弹层销毁

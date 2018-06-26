@@ -30,7 +30,7 @@ define(['$','libbase/checkDataType','libdom/positionWin'],function($,$checkDataT
 	 * 通知计算各个节点的位置 并返回
 	 */
 	function notify(){
-		$.each(cache,function(index,opt){
+		cache.forEach(function(opt,index){
 			if(opt.filter() == true){
 				getPos(opt);
 			}
@@ -52,10 +52,12 @@ define(['$','libbase/checkDataType','libdom/positionWin'],function($,$checkDataT
 	 	 * 		*call: function(pos,node){} //当计算了元素相对于window的位置后回调的函数
 	 	 * 			call回调参数说明：
 	 	 * 			pos: {
-						tt: 0, //元素顶部距离window顶部的距离。>0表示元素顶部在window顶部下面；<0表示元素顶部在window顶部上面
-						bt: 0, //元素底部距离window顶部的距离。>0表示元素底部在window顶部下面；<0表示元素底部在window顶部上面
-						ll: 0, //元素左部距离window左部的距离。>0表示元素左部在window左部右面；<0表示元素左部在window左部左面
-						rl: 0 //元素右部距离window左部的距离。>0表示元素右部在window左部右面；<0表示元素右部在window左部左面
+						 tt: 0, //元素顶部距离window顶部的距离。>0表示元素顶部在window顶部下面；<0表示元素顶部在window顶部上面
+						 bt: 0, //元素底部距离window顶部的距离。>0表示元素底部在window顶部下面；<0表示元素底部在window顶部上面
+						 ll: 0, //元素左部距离window左部的距离。>0表示元素左部在window左部右面；<0表示元素左部在window左部左面
+						 rl: 0, //元素右部距离window左部的距离。>0表示元素右部在window左部右面；<0表示元素右部在window左部左面
+						 bb: 0,  //元素底部距离window底部的距离。>0表示元素底部在window底部上面；<0表示元素底部在window底部下面
+						 tb: 0 //元素顶部距离window底部的距离。>0表示元素顶部在window底部上面；<0表示元素顶部在window底部下面
 					}
 					node: 当前dom对象
 	 	 *
@@ -75,6 +77,15 @@ define(['$','libbase/checkDataType','libdom/positionWin'],function($,$checkDataT
 			if(opt.filter() == true){
                 getPos(opt);
             }
+		},
+
+		unListenPos: function(node){
+			$.each(cache,function(index,opt){
+				if(opt.node === node){
+					cache.splice(index,1);
+					return false;
+				}
+			})
 		}
 	};
 });

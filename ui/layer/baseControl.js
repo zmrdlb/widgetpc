@@ -29,6 +29,10 @@ define(['$','libbase/checkDataType'],function($,$checkDataType){
 	BaseControl.prototype.setconfig = function(config){
 		this._defaultopt = config;
 	};
+
+	BaseControl.prototype.getContentHtml = function(txt){
+		return '';
+	}
 	/**
 	 * 获取弹层对象，具体由子类实现
 	 */
@@ -46,6 +50,8 @@ define(['$','libbase/checkDataType'],function($,$checkDataType){
         }
         this.createcal.fire(this._layerobj);
 	};
+
+	BaseControl.prototype.frameNodesKey = [];
 	/**
 	 * 显示弹层
 	 * @param {Object} *txt 文案配置,选填。如果setconfig调用设置的模板中还有其他node="其他值"，
@@ -66,21 +72,30 @@ define(['$','libbase/checkDataType'],function($,$checkDataType){
 		}else{
 			if($checkDataType.isObject(cal)){
 				var funname = this._funarr;
-				for(var i = 0, len = funname.length; i < len; i++){
-					if($checkDataType.isFunction(cal[funname[i]])){
-						this['_'+funname[i]+'cal'] = cal[funname[i]];
+				$.each(funname,function(index,name){
+					if($checkDataType.isFunction(cal[name])){
+						this['_'+name+'cal'] = cal[name];
 					}
 					else{
-						this['_'+funname[i]+'cal'] = function(){};
+						this['_'+name+'cal'] = function(){};
 					}
-				}
+				}.bind(this))
 			}else{
-				this._okcal = function(){};
+				$.each(funname,function(index,name){
+					this['_'+name+'cal'] = function(){};
+				}.bind(this))
+			}
+
+			var content = this.getContentHtml(txt);
+			if(content){
+				txt.content = content;
 			}
 			//获取txt里面的键值
 			var nodenamearr = [];
 			for(var name in txt){
-				nodenamearr.push(name);
+				if($.inArray(name,this.frameNodesKey) > -1){
+					nodenamearr.push(name);
+				}
 			}
 			this.getlayerobj(true);
 			var nodearr = this._layerobj.getNodes(nodenamearr);

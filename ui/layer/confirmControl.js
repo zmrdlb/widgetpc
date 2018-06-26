@@ -61,6 +61,9 @@ define(['liblayers/confirm','liblayers/baseControl','libinherit/extendClass'],fu
         }
 		return this._layerobj;
 	};
+
+	ConfirmControl.prototype.frameNodesKey = ['title','content','ok','cancel'];
+
 	/**
 	 * 销毁alert弹层
 	 */

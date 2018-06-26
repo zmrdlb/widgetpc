@@ -60,7 +60,7 @@ define(['$','liblayers/bombLayer','liblayers/tpl','libcompatible/deviceevtname',
 	}
 	$extendClass(alert,$bombLayer);
 	/**
-     * 设置alert内容区具有[node="content"]属性的节点的html
+     * 设置alert内容区具有[class="js-content"]属性的节点的html
      * @param {String} html
      */
     alert.prototype.setMyContent = function(html){

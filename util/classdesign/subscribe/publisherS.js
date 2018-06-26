@@ -6,10 +6,10 @@
  * @return 发布者类
  * @example
  * */
-define(['$','libbase/checkDataType','libclassdesign/rwcontroller'],function($,$checkDataType,$rwcontroller){
+define(['$','libbase/checkDataType'],function($,$checkDataType){
 	function Publisher(){
 		this.subscribers = []; //记录订阅者对象
-		this.rwcontrollder = new $rwcontroller();
+		//this.rwcontrollder = new $rwcontroller();
 	}
 	/**
 	 * 参数有效性验证 
@@ -25,13 +25,20 @@ define(['$','libbase/checkDataType','libclassdesign/rwcontroller'],function($,$c
 	 * filter执行返回true，则执行call
 	 */
 	Publisher.prototype.deliver = function(){
-		this.rwcontrollder.read($.proxy(function(data){
-			$.each(this.subscribers,function(index,item){
-				if(item.filter() == true){
-		        	item.call.apply(window,data.args);
-		      	}
-			});
-		},this,{args: arguments}));
+		// this.rwcontrollder.read($.proxy(function(data){
+		// 	$.each(this.subscribers,function(index,item){
+		// 		if(item.filter() == true){
+		//         	item.call.apply(window,data.args);
+		//       	}
+		// 	});
+		// },this,{args: arguments}));
+
+		var args = arguments;
+		this.subscribers.forEach(function(item,index){
+			if(item.filter() == true){
+				item.call.apply(window,args);
+			}
+		});
 	};
 	/**
 	 * 订阅 
@@ -49,9 +56,9 @@ define(['$','libbase/checkDataType','libclassdesign/rwcontroller'],function($,$c
 		        };
 		    }
 			if($.inArray(subscriber,this.subscribers) < 0){
-				this.rwcontrollder.write($.proxy(function(cursub){
-					this.subscribers.push(cursub);
-				},this,subscriber));
+				//this.rwcontrollder.write($.proxy(function(cursub){
+					this.subscribers.push(subscriber);
+				//},this,subscriber));
 			}
 		}
 	};
@@ -62,14 +69,14 @@ define(['$','libbase/checkDataType','libclassdesign/rwcontroller'],function($,$c
 	Publisher.prototype.unsubscribe = function(subscriber){
 		var that = this;
 		if(this.argsValidate(subscriber)){
-			this.rwcontrollder.write($.proxy(function(cursub){
+			//this.rwcontrollder.write($.proxy(function(cursub){
 				$.each(this.subscribers,function(index,item){
-					if(item == cursub){
+					if(item == subscriber){
 					    that.subscribers.splice(index,1);
 						return false;
 					}
 				});
-			},this,subscriber));
+			//},this,subscriber));
 		}
 	};
 	return Publisher;

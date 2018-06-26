@@ -14,6 +14,8 @@ define(function(){
 		//是否支持position:fixed定位
 		fixed: !('undefined' == typeof(document.body.style.maxHeight) || (document.compatMode !== "CSS1Compat" && /msie/.test(navigator.userAgent.toLowerCase()))),
 		//是否支持transition
-		transition: !(_div.style.transition == undefined)
+		transition: !(_div.style.transition == undefined),
+		//是否支持transform
+		transform: !(_div.style.transform == undefined)
 	};
 });

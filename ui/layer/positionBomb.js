@@ -10,7 +10,28 @@
  * 	 pos.poscal.add(function(){console.log('layer定位后回调')});
  * });
  * */
-define(['$','libevt/winscroll','libevt/scroll','libevt/winresize','libevt/resize'],function($,$winscroll,$scroll,$winresize,$resize){
+define([
+	'$',
+	'libevt/winscroll',
+	'libevt/scroll',
+	'libevt/winresize',
+	'libevt/resize',
+	'libcompatible/csssuport'
+],function(
+	$,
+	$winscroll,
+	$scroll,
+	$winresize,
+	$resize,
+	$csssuport
+){
+	var translate = {
+		'transform': 'translate(-50%,-50%)',
+	    '-webkit-transform': 'translate(-50%,-50%)', /* Safari and Chrome */
+	    '-ms-transform': 'translate(-50%,-50%)', /* IE 9 */
+	    '-moz-transform': 'translate(-50%,-50%)', /* Firefox */
+	    '-o-transform': 'translate(-50%,-50%)' /* Opera */
+	};
 	/**
 	 * 定位算法
 	 */
@@ -24,8 +45,12 @@ define(['$','libevt/winscroll','libevt/scroll','libevt/winresize','libevt/resize
 		}
 		switch (posopt.mode){
 			case 'c': //居中定位
-				marginLeft -= (Math.max(layer.width(),posopt.minwidth)/2+posopt.offset[0]);
-                marginTop -= (Math.max(layer.height(),posopt.minheight)/2+posopt.offset[1]);
+				if($csssuport.transform && posopt.useTranslate){
+					$.extend(cssopt,translate);
+				}else{
+					marginLeft -= (Math.max(layer.width(),posopt.minwidth)/2+posopt.offset[0]);
+					marginTop -= (Math.max(layer.height(),posopt.minheight)/2+posopt.offset[1]);
+				}
 				cssopt.top = '50%';
 				cssopt.left = '50%';
 				break;
@@ -74,6 +99,7 @@ define(['$','libevt/winscroll','libevt/scroll','libevt/winresize','libevt/resize
 			sizechange: false, //当mode是c时，offsetParent resize时，待定位层的大小是否会改变
 			minwidth: 0, //定位计算时，待定位层layer的最小宽度
             minheight: 0, //定位计算时，待定位层layer的最小高度
+			useTranslate: true, //if css3 translate is available, whether to use to set position of layer
             custompos: null //用户自定义定位方法。如果声明此方法，则不会使用系统默认的方法设置pos的定位参数，而是把定位参数pos传递给此方法
 		},config || {});
         this.poscal = $.Callbacks(); //setpos后的回调
@@ -110,7 +136,7 @@ define(['$','libevt/winscroll','libevt/scroll','libevt/winresize','libevt/resize
 			}
 		}
 		//说明mode是c时，offsetParent resize时，待定位层的大小会改变，则监听resize事件
-        if(posopt.mode == 'c' && posopt.sizechange){
+        if(posopt.mode == 'c' && posopt.sizechange && (!$csssuport.transform || !posopt.useTranslate || domopt.position == 'absolute')){
             islisresize = true;
             if(domopt.offpage){
                 $winresize.listen(listencall);
