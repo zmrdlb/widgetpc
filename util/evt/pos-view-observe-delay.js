@@ -9,7 +9,7 @@
  * @author Zhang Mingrui | 592044573@qq.com
  * @return 调用方法
  * @example
- * 	requirejs(['libdom/pos-view-observe-delay'],function($posViewObserveDelay){
+ * 	requirejs(['libevt/pos-view-observe-delay'],function($posViewObserveDelay){
  * 		$posViewObserveDelay.listenPos({
  * 			node: jquery Node节点对象
  * 			call: function(pos,node){console.log(pos);console.log(node);},
