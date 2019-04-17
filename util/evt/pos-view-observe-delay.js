@@ -9,21 +9,33 @@
  * @author Zhang Mingrui | 592044573@qq.com
  * @return 调用方法
  * @example
- * 	requirejs(['libdom/posWinSR'],function($posWinSR){
- * 		$posWinSR.listenPos({
+ * 	requirejs(['libdom/pos-view-observe-delay'],function($posViewObserveDelay){
+ * 		$posViewObserveDelay.listenPos({
  * 			node: jquery Node节点对象
  * 			call: function(pos,node){console.log(pos);console.log(node);},
  * 			filter: function(){return true;} //过滤条件，可不写
  * 		});
  *  });
  */
-define(['$','libbase/checkDataType','libdom/positionWin','libevt/winscroll'],function($,$checkDataType,$positionWin,$winscroll){
+define([
+	'$',
+	'libbase/checkDataType',
+	'libdom/position-viewport',
+	'libevt/winscroll',
+	'libevt/winresize'
+],function(
+	$,
+	$checkDataType,
+	$positionViewport,
+	$winscroll,
+	$winresize
+){
 	var cache = []; //数据缓存
 	/**
 	 * 获取位置
 	 */
 	function getPos(opt){
-		var pos = $positionWin(opt.node);
+		var pos = $positionViewport(opt.node);
 		opt.call(pos,opt.node);
 	};
 
@@ -42,6 +54,10 @@ define(['$','libbase/checkDataType','libdom/positionWin','libevt/winscroll'],fun
 	$winscroll.listen({
 		call: notify
 	});
+	//绑定窗口resize的监听
+	$winresize.listen({
+		call: notify
+	})
 
 	return {
 		/**

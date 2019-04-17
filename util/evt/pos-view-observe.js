@@ -8,21 +8,29 @@
  * @author Zhang Mingrui | 592044573@qq.com
  * @return 调用方法
  * @example
- * 	requirejs(['libdom/posWinSR'],function($posWinSR){
- * 		$posWinSR.listenPos({
+ * 	requirejs(['libevt/pos-view-observe'],function($posViewObserve){
+ * 		$posViewObserve.listenPos({
  * 			node: jquery Node节点对象
  * 			call: function(pos,node){console.log(pos);console.log(node);},
  * 			filter: function(){return true;} //过滤条件，可不写
  * 		});
  *  });
  */
-define(['$','libbase/checkDataType','libdom/positionWin'],function($,$checkDataType,$positionWin){
+define([
+	'$',
+	'libbase/checkDataType',
+	'libdom/position-viewport'
+],function(
+	$,
+	$checkDataType,
+	$positionViewport
+){
 	var cache = []; //数据缓存
 	/**
 	 * 获取位置
 	 */
 	function getPos(opt){
-		var pos = $positionWin(opt.node);
+		var pos = $positionViewport(opt.node);
 		opt.call(pos,opt.node);
 	};
 
@@ -38,9 +46,7 @@ define(['$','libbase/checkDataType','libdom/positionWin'],function($,$checkDataT
 	};
 
 	//绑定窗口scroll的监听
-	$(window).on('scroll',function(e){
-	    notify();
-	});
+	$(window).on('scroll',notify).on('resize',notify);
 
 	return {
 		/**
